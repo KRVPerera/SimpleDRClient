@@ -19,7 +19,7 @@
     Configuration Properties -> C/C++ -> General -> Additional Include Directories**
       
     Current Paths are stated below, change these according to your enviornment. These folders are found
-    after extracting [DynamoRIO-Windows-6.1.1-3.zip](https://github.com/DynamoRIO/dynamorio/releases/download/release_6_1_1/DynamoRIO-Windows-6.1.1-3.zip) 6.1.1 Release in F:\FYP2\ folder in my pc
+    after extracting [DynamoRIO-Windows-6.1.1-3.zip](https://github.com/DynamoRIO/dynamorio/releases/download/release_6_1_1/DynamoRIO-Windows-6.1.1-3.zip) 6.1.1 Release in **F:\FYP2\** folder in my pc
 
         F:\FYP2\DynamoRIO-Windows-6.1.1-3\DynamoRIO-Windows-6.1.1-3\ext\include
         F:\FYP2\DynamoRIO-Windows-6.1.1-3\DynamoRIO-Windows-6.1.1-3\include
