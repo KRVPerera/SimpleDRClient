@@ -44,15 +44,13 @@
 * -only_from_app  Do not count instructions in shared libraries
 */
 #define WINDOWS
-#define X86_32
+#define X86_64
 #define SHOW_RESULTS
 #include <stddef.h>
 #include <stdio.h>
 #include "dr_api.h"
 #include "drmgr.h"
 #include <string.h>
-
-
 
 #ifdef WINDOWS
 # define DISPLAY_STRING(msg) dr_messagebox(msg)
@@ -99,12 +97,15 @@ dr_client_main(client_id_t id, int argc, const char *argv[])
 			DR_ASSERT_MSG(false, "invalid option");
 		}
 	}
+
+
 	drmgr_init();
 
 	/* Get main module address */
 	if (only_from_app) {
 		module_data_t *exe = dr_get_main_module();
 		if (exe != NULL)
+			dr_fprintf(STDERR, "Application : \"%s\"\n", exe->names.file_name);
 			exe_start = exe->start;
 		dr_free_module_data(exe);
 	}
