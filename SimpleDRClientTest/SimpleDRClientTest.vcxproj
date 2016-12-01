@@ -39,6 +39,7 @@
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PlatformToolset>v120</PlatformToolset>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PlatformToolset>v120</PlatformToolset>
@@ -89,17 +90,49 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>F:\FYP2\DynamoRIO-Windows-6.1.1-3\DynamoRIO-Windows-6.1.1-3\ext\include;F:\FYP2\DynamoRIO-Windows-6.1.1-3\DynamoRIO-Windows-6.1.1-3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\FYP2\DynamoRIO-Windows-6.1.1-3\DynamoRIO-Windows-6.1.1-3\ext\include;$(ProjectDir)\obj;$(ProjectDir)\include;F:\FYP2\DynamoRIO-Windows-6.1.1-3\DynamoRIO-Windows-6.1.1-3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;DEBUG;_DEBUG;X86_32;WINDOWS;SHOW_SYMBOLS;_CRT_SECURE_NO_WARNINGS;CMAKE_INTDIR="Debug";exalgo_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>/Debug</AssemblerListingLocation>
+      <CompileAs>CompileAsC</CompileAs>
+      <OmitFramePointers>false</OmitFramePointers>
     </ClCompile>
     <Link>
       <AdditionalDependencies>F:\FYP2\DynamoRIO-Windows-6.1.1-3\DynamoRIO-Windows-6.1.1-3\ext\lib64\debug\drmgr.lib;F:\FYP2\DynamoRIO-Windows-6.1.1-3\DynamoRIO-Windows-6.1.1-3\lib64\debug\dynamorio.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Helium\dr_clients\src\utilities.c" />
+    <ClCompile Include="cpuid.c" />
+    <ClCompile Include="funcreplace.c" />
+    <ClCompile Include="funcwrap.c" />
     <ClCompile Include="inscount.c" />
+    <ClCompile Include="instrace.c" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="memdump.c" />
+    <ClCompile Include="memtrace.c" />
+    <ClCompile Include="misc.c" />
+    <ClCompile Include="moduleinfo.c" />
+    <ClCompile Include="obj\halide_funcs.c" />
+    <ClCompile Include="profile_global.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="defines.h" />
+    <ClInclude Include="include\cpuid.h" />
+    <ClInclude Include="Include\debug.h" />
+    <ClInclude Include="include\defines.h" />
+    <ClInclude Include="Include\funcreplace.h" />
+    <ClInclude Include="include\functrace.h" />
+    <ClInclude Include="Include\funcwrap.h" />
+    <ClInclude Include="Include\inscount.h" />
+    <ClInclude Include="Include\instrace.h" />
+    <ClInclude Include="Include\memdump.h" />
+    <ClInclude Include="Include\memtrace.h" />
+    <ClInclude Include="Include\misc.h" />
+    <ClInclude Include="include\moduleinfo.h" />
+    <ClInclude Include="Include\output.h" />
+    <ClInclude Include="include\profile_global.h" />
+    <ClInclude Include="include\utilities.h" />
+    <ClInclude Include="obj\halide_funcs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
