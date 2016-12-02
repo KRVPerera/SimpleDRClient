@@ -1,8 +1,8 @@
-#include "moduleinfo.h"
+#include "include/moduleinfo.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "defines.h"
+#include "include/defines.h"
 
 
 /* private functions */
@@ -40,7 +40,7 @@ static module_t * get_tail (module_t * head){
 static bbinfo_t * add_bb_to_list (bbinfo_t * bb_list, unsigned int addr, bool extra_info, uint size){
 
 	DR_ASSERT(size > bb_list[0].start_addr);
-	
+
 
 	bb_list[0].start_addr++;  //first element of the start address will have the length
 	bb_list[bb_list[0].start_addr].start_addr = addr;
@@ -67,7 +67,7 @@ static bbinfo_t * add_bb_to_list (bbinfo_t * bb_list, unsigned int addr, bool ex
 		bb_list[bb_list[0].start_addr].func_addr = 0;
 
 	}
-	 
+
 	return &bb_list[bb_list[0].start_addr];
 
 }
@@ -75,7 +75,7 @@ static bbinfo_t * add_bb_to_list (bbinfo_t * bb_list, unsigned int addr, bool ex
 
 /* compare function for qsort */
 static int compare_func (const void * a, const void * b){
-	
+
 	bbinfo_t * a_bb = (bbinfo_t *)a;
 	bbinfo_t * b_bb = (bbinfo_t *)b;
 	return (a_bb->start_addr - b_bb->start_addr);
@@ -175,14 +175,14 @@ int md_get_module_position(module_t * head, char * name){
 		head = head->next;
 		pos++;
 	}
-	
+
 	return -1;
 
 }
 
 
 bool md_add_module(module_t * head, char * name, uint length_list_bbs){
-	
+
 	module_t * tail;
 
 	if (md_lookup_module(head, name) == NULL){
@@ -220,7 +220,7 @@ bbinfo_t * md_add_bb_to_module(module_t * head,
 
 /* sorts the elements stored in individual lists of the linked list */
 void md_sort_bb_list_in_module (module_t * head){
-	while(head != NULL){ 
+	while(head != NULL){
 		qsort(&head->bbs[1],head->bbs[0].start_addr,sizeof(bbinfo_t),compare_func);
 		head = head->next;
 	}
@@ -228,7 +228,7 @@ void md_sort_bb_list_in_module (module_t * head){
 
 /* frees memory of the stored list */
 void md_delete_list (module_t * head, bool extra_info){
-	
+
 	module_t * prev;
 	int i = 0;
 	int j= 0;
@@ -254,7 +254,7 @@ void md_delete_list (module_t * head, bool extra_info){
 
 /* assumes a sorted list - does a binary search on it */
 bbinfo_t* md_lookup_bb_in_module(module_t * head, char * name, unsigned int addr){
-	 
+
 	module_t * module = md_lookup_module(head,name);
 	bbinfo_t * list;
 	unsigned int size;
@@ -269,7 +269,7 @@ bbinfo_t* md_lookup_bb_in_module(module_t * head, char * name, unsigned int addr
 			if(addr == list[i].start_addr){
 				return &list[i];
 			}
-		
+
 		}
 
 	}
@@ -280,7 +280,7 @@ bbinfo_t* md_lookup_bb_in_module(module_t * head, char * name, unsigned int addr
 
 /* file I/O */
 void md_read_from_file (module_t * head, file_t file, bool extra_info){
-	 
+
 	uint64 map_size;
 	size_t actual_size;
 	bool ok;
@@ -313,10 +313,10 @@ void md_read_from_file (module_t * head, file_t file, bool extra_info){
 
 	line = (char *)map;
 	for(i=0;i<no_modules;i++){
-		
+
 		line = strchr(line,'\n');
 		line++; //start of the next line
-		
+
 		//dr_sscanf(line,"%[^\t\n]\n",module_name);
 		dr_get_token(line,module_name,MAX_STRING_LENGTH);
 		//getFinalName(module_name);

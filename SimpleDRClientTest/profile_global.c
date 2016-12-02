@@ -1,7 +1,7 @@
-#include "profile_global.h"
-#include "utilities.h"
-#include "defines.h"
-#include "moduleinfo.h"
+#include "include/profile_global.h"
+#include "include/utilities.h"
+#include "include/defines.h"
+#include "include/moduleinfo.h"
 #include "drmgr.h"
 //#include <stdio.h>
 

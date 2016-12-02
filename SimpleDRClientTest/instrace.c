@@ -1,13 +1,13 @@
-#include "instrace.h"
+#include "include/instrace.h"
 #include <string.h> /* for memset */
 #include <stddef.h> /* for offsetof */
 #include "dr_api.h"
 #include "drmgr.h"
 #include "drutil.h"
-#include "utilities.h"
-#include "debug.h"
-#include "output.h"
-#include "funcwrap.h"
+#include "include/utilities.h"
+#include "include/debug.h"
+#include "include/output.h"
+#include "include/funcwrap.h"
 
 /****************************defines*********************************/
 

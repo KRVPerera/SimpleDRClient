@@ -1,9 +1,9 @@
-#include "cpuid.h"
+#include "include/cpuid.h"
 #include <stdio.h>
 #include "dr_api.h"
 #include "drmgr.h"
-#include "defines.h"
-#include "utilities.h"
+#include "include/defines.h"
+#include "include/utilities.h"
 
 
 //ECX

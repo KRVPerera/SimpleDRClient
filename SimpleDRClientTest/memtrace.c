@@ -1,12 +1,12 @@
-#include "memtrace.h"
+#include "include/memtrace.h"
 #include <string.h> /* for memset */
 #include <stddef.h> /* for offsetof */
 #include "dr_api.h"
 #include "drmgr.h"
 #include "drutil.h"
-#include "utilities.h"
-#include "moduleinfo.h"
-#include "defines.h"
+#include "include/utilities.h"
+#include "include/moduleinfo.h"
+#include "include/defines.h"
 
 /*************************defines******************************/
 

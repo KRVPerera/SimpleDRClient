@@ -1,9 +1,9 @@
 #include "dr_api.h"
-#include "defines.h"
+#include "include/defines.h"
 #include "drutil.h"
-#include "moduleinfo.h"
-#include "utilities.h"
-#include "memdump.h"
+#include "include/moduleinfo.h"
+#include "include/utilities.h"
+#include "include/memdump.h"
 
 
 /* for each client following functions may be implemented
@@ -100,11 +100,11 @@ void memdump_init(client_id_t id, const char * name, const char * arguments)
 	filter_head = md_initialize();
 	done_head = md_initialize();
 	app_pc_head = md_initialize();
-	
+
 	in_file = dr_open_file(client_arg->filter_filename, DR_FILE_READ);
 	md_read_from_file(filter_head, in_file, false);
 	dr_close_file(in_file);
-	
+
 	in_file = dr_open_file(client_arg->app_pc_filename, DR_FILE_READ);
 	md_read_from_file(app_pc_head, in_file, false);
 	dr_close_file(in_file);
@@ -166,7 +166,7 @@ memdump_thread_exit(void *drcontext){
 
 static bool is_mem_region_present(mem_alloc_t * region, app_pc base_pc, uint size, uint region_size){
 
-	int i = 0; 
+	int i = 0;
 	for (i = 0; i < region_size; i++){
 		if (region[i].base_pc == base_pc && region[i].size == size){
 			return true;
@@ -190,7 +190,7 @@ static char * get_mem_dump_filename(app_pc base_pc, uint size, uint write, uint 
 
 	char other_details[MAX_STRING_LENGTH];
 	char * filename = dr_global_alloc(sizeof(char) * MAX_STRING_LENGTH);
-	
+
 	dr_snprintf(other_details, MAX_STRING_LENGTH, "%x_%d_%d_%d", base_pc, size, write, other_info);
 	populate_conv_filename(filename, client_arg->output_folder, ins_pass_name, other_details);
 	return filename;
@@ -225,7 +225,7 @@ void clean_call_mem_information(instr_t * instr, app_pc mem_val, uint write){
 	uint prot;
 	file_t dump_file;
 	char * dump_filename;
-	
+
 	DR_ASSERT(data != NULL);
 	offset = instr_get_app_pc(instr) - data->start;
 
@@ -233,14 +233,14 @@ void clean_call_mem_information(instr_t * instr, app_pc mem_val, uint write){
 
 	//if (!md_lookup_bb_in_module(done_head, data->full_path, offset)){
 
-		//md_add_bb_to_module(done_head, data->full_path, offset, MAX_BBS_PER_MODULE, false); 
+		//md_add_bb_to_module(done_head, data->full_path, offset, MAX_BBS_PER_MODULE, false);
 		dr_query_memory(mem_val, &base_pc, &size, &prot);
 		//DEBUG_PRINT("base pc - %x, size - %u, write - %u\n", base_pc, size, write);
 		if (write){  /* postpone till the end of the function */
 			if (!is_mem_region_present(write_regions, base_pc, size, write_region_size)){
 				DEBUG_PRINT("write registered - offset - %x memval %x\n", offset, mem_val);
 				add_to_mem_region(write_regions, base_pc, size, &write_region_size);
-				DEBUG_PRINT("base pc %x, size %d\n", base_pc, size); 
+				DEBUG_PRINT("base pc %x, size %d\n", base_pc, size);
 			}
 		}
 		else{
@@ -296,7 +296,7 @@ void *user_data)
 
 		dr_save_reg(drcontext, bb, instr, reg1, SPILL_SLOT_1);
 		dr_save_reg(drcontext, bb, instr, reg2, SPILL_SLOT_2);
-		
+
 		dr_mutex_lock(mutex);
 		DEBUG_PRINT("instrumenting %x pc\n", instr_get_app_pc(instr));
 
@@ -305,18 +305,18 @@ void *user_data)
 		for (i = 0; i < instr_num_srcs(instr); i++){
 			if (opnd_is_memory_reference(instr_get_src(instr, i))) {
 				drutil_insert_get_mem_addr(drcontext, bb, instr, instr_get_src(instr,i), reg1, reg2);
-				dr_insert_clean_call(drcontext, bb, instr, clean_call_mem_information, false, 3, 
+				dr_insert_clean_call(drcontext, bb, instr, clean_call_mem_information, false, 3,
 					OPND_CREATE_INTPTR(instr_clones[instr_clone_amount]), opnd_create_reg(reg1), OPND_CREATE_INTPTR(false));
 			}
 		}
 		for (i = 0; i < instr_num_dsts(instr); i++){
 			if (opnd_is_memory_reference(instr_get_dst(instr, i))) {
 				drutil_insert_get_mem_addr(drcontext, bb, instr, instr_get_dst(instr, i), reg1, reg2);
-				dr_insert_clean_call(drcontext, bb, instr, clean_call_mem_information, false, 3, 
+				dr_insert_clean_call(drcontext, bb, instr, clean_call_mem_information, false, 3,
 					OPND_CREATE_INTPTR(instr_clones[instr_clone_amount]), opnd_create_reg(reg1), OPND_CREATE_INTPTR(true));
 			}
 		}
-		
+
 
 		instr_clone_amount++;
 
@@ -356,7 +356,7 @@ static void post_func_cb(void * wrapcxt, void ** user_data){
 			dr_close_file(dump_file);
 		}
 		written_count++;
-	
+
 
 }
 
@@ -366,10 +366,10 @@ void memdump_module_load(void * drcontext, module_data_t * module, bool loaded){
 	int i = 0;
 	app_pc address;
 
-	
+
 	if (md != NULL){
 		for (int i = 1; i <= md->bbs[0].start_addr; i++){
-			
+
 			address = md->bbs[i].start_addr + module->start;
 			DEBUG_PRINT("%s module %x function wrapping\n", md->module, address);
 			drwrap_wrap(address, NULL, post_func_cb);

@@ -1,7 +1,7 @@
 #include "dr_api.h"
-#include "defines.h"
-#include "moduleinfo.h"
-#include "utilities.h"
+#include "include/defines.h"
+#include "include/moduleinfo.h"
+#include "include/utilities.h"
 
 
 /* for each client following functions may be implemented
@@ -145,10 +145,10 @@ void *user_data)
 				//LOG_PRINT(logfile, "may be relative addr, %d,%d,%d,%d\n", opnd_get_base(opnd), opnd_get_index(opnd), opnd_get_scale(opnd), opnd_get_disp(opnd));
 			}
 		}
-		
+
 	}*/
 
-	
+
 	return DR_EMIT_DEFAULT;
 }
 

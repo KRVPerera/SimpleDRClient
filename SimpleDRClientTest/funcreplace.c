@@ -1,9 +1,9 @@
 #include "dr_api.h"
-#include "moduleinfo.h"
-#include "utilities.h"
+#include "include/moduleinfo.h"
+#include "include/utilities.h"
 #include "drwrap.h"
 #include <drmgr.h>
-#include "halide_funcs.h"
+#include "obj/halide_funcs.h"
 //#include <stdio.h>
 
 

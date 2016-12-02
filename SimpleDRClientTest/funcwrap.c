@@ -1,9 +1,9 @@
 #include "dr_api.h"
-#include "funcwrap.h"
-#include "moduleinfo.h"
+#include "include/funcwrap.h"
+#include "include/moduleinfo.h"
 #include "drwrap.h"
 #include "drmgr.h"
-#include "utilities.h"
+#include "include/utilities.h"
 
 
 /* for each client following functions may be implemented
@@ -84,7 +84,7 @@ void funcwrap_init(client_id_t id, const char * name, const char * arguments)
 		logfile = dr_open_file(logfilename, DR_FILE_WRITE_OVERWRITE);
 	}
 	strncpy(ins_pass_name, name, MAX_STRING_LENGTH);
-	
+
 
 }
 
@@ -104,13 +104,13 @@ void funcwrap_exit_event(void)
 
 /* callbacks for threads */
 void funcwrap_thread_init(void *drcontext){
-	
+
 	per_thread_t * data;
 	char logfilename[MAX_STRING_LENGTH];
 	char thread_id[MAX_STRING_LENGTH];
 
 	DEBUG_PRINT("%s - initializing thread %d\n", ins_pass_name, dr_get_thread_id(drcontext));
-	
+
 	data = dr_thread_alloc(drcontext, sizeof(per_thread_t));
 	if (log_mode){
 		dr_snprintf(thread_id, MAX_STRING_LENGTH, "%d", dr_get_thread_id(drcontext));
@@ -118,7 +118,7 @@ void funcwrap_thread_init(void *drcontext){
 		data->logfile = dr_open_file(logfilename, DR_FILE_WRITE_OVERWRITE);
 	}
 
-	
+
 
 	data->filter_func = false;
 	data->nesting = 0;
@@ -142,7 +142,7 @@ funcwrap_thread_exit(void *drcontext){
 }
 
 bool should_filter_func(){
-	
+
 	per_thread_t * data = drmgr_get_tls_field(dr_get_current_drcontext(), tls_index);
 
 	if (!file_registered){
@@ -160,7 +160,7 @@ bool should_filter_thread(uint thread_id){
 static void clean_call(uint pc){
 
 	//DEBUG_PRINT("funcwrap - entered the pre-call clean call\n");
-	
+
 	dr_mcontext_t mc = { sizeof(mc), DR_MC_ALL };
 	dr_get_mcontext(dr_get_current_drcontext(), &mc);
 	mc.pc = pc;
@@ -169,11 +169,11 @@ static void clean_call(uint pc){
 		dr_flush_region(0, ~((ptr_uint_t)0));
 		dr_redirect_execution(&mc);
 	}
-	
+
 	//DEBUG_PRINT("funcwrap - entered the pre-call done\n");
 
-	
-	
+
+
 
 }
 
@@ -189,8 +189,8 @@ void *user_data)
 	per_thread_t * data = drmgr_get_tls_field(dr_get_current_drcontext(), tls_index);
 	module_t * md;
 	app_pc offset;
-	
-	
+
+
 	if (instr != first || data->nesting != 0){
 		return DR_EMIT_DEFAULT;
 	}
@@ -198,12 +198,12 @@ void *user_data)
 	module_data = dr_lookup_module(pc);
 	data = drmgr_get_tls_field(drcontext, tls_index);
 
-	
+
 	if (module_data != NULL){
 		md = md_lookup_module(head, module_data->full_path);
 		if (md != NULL){
 			offset = pc - module_data->start;
-			
+
 			for (int i = 1; i <= md->bbs[0].start_addr; i++){
 				if (offset == md->bbs[i].start_addr){
 					DEBUG_PRINT("bb instrumenting function\n");
@@ -217,7 +217,7 @@ void *user_data)
 		}
 	}
 
-	
+
 
 	/*if (data->filter_func){
 		instrlist_disassemble(drcontext, instr_get_app_pc(instrlist_first(bb)), bb, logfile);
@@ -242,12 +242,12 @@ static void post_func_cb(void * wrapcxt, void ** user_data){
 	per_thread_t * data = drmgr_get_tls_field(dr_get_current_drcontext(), tls_index);
 	data->nesting--;
 	//dr_unlink_flush_region(0, ~((ptr_uint_t)0));
-	DR_ASSERT(data->nesting >= 0); 
+	DR_ASSERT(data->nesting >= 0);
 	if (data->nesting == 0){
 		data->filter_func = false;
 	}
 	DEBUG_PRINT("funcwrap - post_func_cb done \n");
-	
+
 
 }
 
@@ -257,8 +257,8 @@ void funcwrap_module_load(void * drcontext, module_data_t * module, bool loaded)
 
 	module_t * md = md_lookup_module(head, module->full_path);
 	int i = 0;
-	app_pc address;	
-	
+	app_pc address;
+
 	if (md != NULL){
 		for (int i = 1; i <= md->bbs[0].start_addr; i++){
 			address = md->bbs[i].start_addr + module->start;
@@ -266,7 +266,7 @@ void funcwrap_module_load(void * drcontext, module_data_t * module, bool loaded)
 			drwrap_wrap(address, pre_func_cb, post_func_cb);
 		}
 	}
-	
+
 
 }
 

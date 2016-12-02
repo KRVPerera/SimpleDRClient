@@ -18,9 +18,6 @@
     <ClCompile Include="profile_global.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Helium\dr_clients\src\utilities.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="moduleinfo.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -52,6 +49,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="obj\halide_funcs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
